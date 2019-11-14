@@ -1,0 +1,410 @@
+package cn.com.infosec.netcert.kmcAdmin.ui.admin;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
+
+import org.eclipse.jface.window.ApplicationWindow;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+
+import cn.com.infosec.netcert.base.Request;
+import cn.com.infosec.netcert.framework.crypto.CryptoException;
+import cn.com.infosec.netcert.framework.crypto.IHSM;
+import cn.com.infosec.netcert.framework.crypto.SM2Id;
+import cn.com.infosec.netcert.framework.crypto.impl.SoftCryptoAndStore;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.CertContainer;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.CspCertInfo;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.NeedPinException;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeyCSPImpl;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl;
+import cn.com.infosec.netcert.framework.log.FileLogger;
+import cn.com.infosec.netcert.framework.utils.DNItemReverseUtil;
+import cn.com.infosec.netcert.kmcAdmin.ui.login.Panel_ChooseCert;
+import cn.com.infosec.netcert.kmcAdmin.ui.login.Panel_Dialog;
+import cn.com.infosec.netcert.kmcAdmin.utils.Env;
+import cn.com.infosec.netcert.kmcAdmin.utils.Env.ALG;
+import cn.com.infosec.util.Base64;
+
+/**
+ * 操作员复核
+ * @Author 江岩    
+ * @Time 2019-06-10 17:40
+ */
+public class Panel_Checking extends ApplicationWindow {
+	private Combo combo_dev, combo_devSN;
+
+	private CertContainer[] cc;
+	private CertContainer chooseCert;
+	private CspCertInfo[] cspList;
+	private CspCertInfo chooseCsp;
+	private UsbKeySKFImpl userSkf;
+	private UsbKeyCSPImpl userCSP;
+	private Request req;
+
+	public Map<String, UsbKeySKFImpl> map;
+	private String lib, keyDriverLibPath;
+
+	private Properties pro;
+	private FileLogger log = FileLogger.getLogger(this.getClass());
+	private static ResourceBundle l = Env.getLanguage();
+
+	/**
+	 * 构造方法
+	 */
+	public Panel_Checking(Request req) {
+		super(null);
+		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
+		this.req = req;
+		try {
+			pro = Env.getProperties(new File(Env.keyConfigFile));
+		} catch (Exception e) {
+			log.errlog("LibConfigFile load fail", e);
+			Panel_Dialog.messageDialog("error", e.getMessage());
+			return;
+		}
+	}
+
+	/**
+	 * 视图页面  
+	 * @Author 江岩      
+	 * @Time 2019-06-10 17:40
+	 * @version 1.0
+	 */
+	@Override
+	protected Control createContents(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.marginBottom = 50;
+		gridLayout.marginLeft = 30;
+		gridLayout.marginRight = 40;
+		gridLayout.marginTop = 30;
+		gridLayout.verticalSpacing = 15;
+		container.setLayout(gridLayout);
+
+		Label lbl_USBkey = new Label(container, SWT.NONE);
+		GridData gd_lbl_USBkey = new GridData(SWT.RIGHT);
+		gd_lbl_USBkey.horizontalAlignment = SWT.RIGHT;
+		lbl_USBkey.setLayoutData(gd_lbl_USBkey);
+		lbl_USBkey.setAlignment(SWT.RIGHT);
+		lbl_USBkey.setText(l.getString("driverName") + "：");
+
+		combo_dev = new Combo(container, SWT.READ_ONLY);
+		GridData gd_combo_dev = new GridData(SWT.LEFT);
+		gd_combo_dev.widthHint = 208;
+		combo_dev.setLayoutData(gd_combo_dev);
+
+		if (ALG.SM2 == Env.alg) {
+			@SuppressWarnings("unchecked")
+			Enumeration<String> keyList = (Enumeration<String>) pro.propertyNames();
+			while (keyList.hasMoreElements()) {
+				combo_dev.add(keyList.nextElement());
+			}
+			if (combo_dev.getItemCount() != 0) {
+				combo_dev.select(0);
+				keyDriverLibPath = pro.getProperty(combo_dev.getText());
+			}
+
+			Label lbl_serialNum = new Label(container, SWT.NONE);
+			GridData gd_lbl_serialNum = new GridData(SWT.RIGHT);
+			gd_lbl_serialNum.horizontalAlignment = SWT.RIGHT;
+			lbl_serialNum.setLayoutData(gd_lbl_serialNum);
+			lbl_serialNum.setAlignment(SWT.RIGHT);
+			lbl_serialNum.setText(l.getString("SN") + "：");
+
+			combo_devSN = new Combo(container, SWT.READ_ONLY);
+			GridData gd_combo_devSN = new GridData(SWT.LEFT);
+			gd_combo_devSN.widthHint = 208;
+			combo_devSN.setLayoutData(gd_combo_devSN);
+
+			combo_dev.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent arg0) {
+					combo_devSN.removeAll();
+					keyDriverLibPath = pro.getProperty(combo_dev.getText());
+					try {
+						String[] devItems = UsbKeySKFImpl.enumDev(keyDriverLibPath);
+						for (String s : devItems) {
+							combo_devSN.add(s);
+						}
+						if (devItems.length != 0) {
+							combo_devSN.select(0);
+						}
+					} catch (CryptoException e) {
+						log.errlog("Enum device", e);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_enumDev"));
+						mb.open();
+					}
+				}
+			});
+		} else {
+			String[] pro = UsbKeyCSPImpl.listProvider();
+			for (String s : pro) {
+				combo_dev.add(s);
+			}
+			if (pro.length != 0) {
+				combo_dev.select(0);
+			}
+		}
+		new Label(container, SWT.NONE);
+
+		Button btn_review = new Button(container, SWT.NONE);
+		btn_review.setText(l.getString("OK"));
+		GridData gd_btn_review = new GridData(SWT.CENTER);
+		gd_btn_review.horizontalAlignment = SWT.CENTER;
+		gd_btn_review.widthHint = 76;
+		btn_review.setLayoutData(gd_btn_review);
+
+		btn_review.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (ALG.SM2 == Env.alg
+						&& (combo_devSN.getText() == null || combo_devSN.getText().length() == 0)) {
+					MessageBox mb = new MessageBox(getShell());
+					mb.setMessage(l.getString("Notice_null_SN"));
+					mb.open();
+					return;
+				}
+				if (ALG.SM2 == Env.alg) {
+					try {
+						userSkf = new UsbKeySKFImpl(keyDriverLibPath, combo_devSN.getText().trim());
+						Env.getMap().put(pro.getProperty(combo_dev.getText()) + combo_devSN.getText().trim(), userSkf);
+					} catch (CryptoException ee) {
+						log.errlog("New SKF fail", ee);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_newSKF"));
+						mb.open();
+						return;
+					}
+					try {
+						try {
+							cc = userSkf.enumCert(IHSM.SIGN);
+						} catch (NeedPinException ee) {
+							Panel_VerifyPin verifyPin = new Panel_VerifyPin();
+							verifyPin.setBlockOnOpen(true);
+							int w = verifyPin.open();
+							if (w != 0) {
+								return;
+							} else {
+								int result = userSkf.verifyPIN(verifyPin.pin);
+								if (result == 0) {
+									cc = userSkf.enumCert(IHSM.SIGN);
+								} else {
+									MessageBox mb = new MessageBox(getShell());
+									mb.setMessage(l.getString("Notice_error_PIN"));
+									mb.open();
+									return;
+								}
+							}
+						}
+						CertContainer[] skfs = getMatchIssuerSM2Cert(cc);
+						if (skfs.length == 0) {
+							MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+							mb.setMessage(l.getString("Notice_not_foundIssuerCert"));
+							mb.open();
+							return;
+						} else if (skfs.length == 1) {
+							chooseCert = skfs[0];
+						} else {
+							Panel_ChooseCert choose = new Panel_ChooseCert(cc);
+							choose.setBlockOnOpen(true);
+							int w = choose.open();
+							if (w == 0) { // 右上角关闭(正常关闭)返回值 为1 close() 关闭返回值
+								chooseCert = choose.chooseCert;
+							} else {
+								return;
+							}
+						}
+					} catch (CryptoException ee) {
+						log.errlog("Enum Cert fail", ee);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_enumCert"));
+						mb.open();
+						return;
+					}
+					byte[] hash = null;
+					X509Certificate signCer = chooseCert.getCert();
+					hash = SoftCryptoAndStore.SM3WithId(req.getSignatureValue().getBytes(),
+							SM2Id.getSignId("ADMIN").getBytes(), signCer.getPublicKey());
+
+					byte[] checkerSign = null;
+					try {
+						try {
+							checkerSign = userSkf.sign(chooseCert.getContainerName(), 0, null, hash, IHSM.SM3withSM2,
+									SM2Id.getSignId("sign"));
+						} catch (NeedPinException ee) {
+							Panel_VerifyPin verifyPin = new Panel_VerifyPin();
+							verifyPin.setBlockOnOpen(true);
+							int w = verifyPin.open();
+							if (w != 0) {
+								return;
+							} else {
+								int result = userSkf.verifyPIN(verifyPin.pin);
+								if (result == 0) {
+									checkerSign = userSkf.sign(chooseCert.getContainerName(), 0, null, hash,
+											IHSM.SM3withSM2, SM2Id.getSignId("sign"));
+								} else {
+									MessageBox mb = new MessageBox(getShell());
+									mb.setMessage(l.getString("Notice_error_PIN"));
+									mb.open();
+									return;
+								}
+							}
+						}
+					} catch (CryptoException ce) {
+						log.errlog("Sign fail", ce);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_skfSign"));
+						mb.open();
+						return;
+					}
+					try {
+						req.setCrossCheckSign(Base64.encode(checkerSign));
+						req.setCrossChecker(signCer);
+						req.setCrossCheckSignAlg(IHSM.SM3withSM2);
+						close();
+					} catch (IOException e1) {
+						log.errlog("Base64 decode error", e1);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_Base64Encode"));
+						mb.open();
+						return;
+					}
+				} else { // RSA
+					lib = combo_dev.getText().trim();
+					userCSP = new UsbKeyCSPImpl(lib);
+					cspList = userCSP.listCert(IHSM.SIGN);
+					CspCertInfo[] csps = getMatchIssuerRSACert(cspList);
+					if (csps.length == 0) {
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_not_foundIssuerCert"));
+						mb.open();
+						return;
+					} else if (csps.length == 1) {
+						chooseCsp = csps[0];
+					} else {
+						Panel_ChooseCert choose = new Panel_ChooseCert(csps);
+						choose.setBlockOnOpen(true);
+						int w = choose.open();
+						if (w == 0) { // 右上角关闭(正常关闭)返回值 为1 close() 关闭返回值
+							chooseCsp = choose.chooseCsp;
+						} else {
+							return;
+						}
+					}
+					byte[] hash = null;
+					hash = req.getSignatureValue().getBytes();
+					try {
+						byte[] checkerSign = userCSP.sign(chooseCsp.container, 0, null, hash, IHSM.SHA1withRSA, null);
+						req.setCrossCheckSign(Base64.encode(checkerSign));
+					} catch (Exception e1) {
+						log.errlog("Sign fail/Base64 encode error", e1);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_CSPSign"));
+						mb.open();
+						return;
+					}
+					try {
+						String signCerStr = userCSP.exportCertBase64(IHSM.SIGN, chooseCsp.container);
+						CertificateFactory cf = CertificateFactory.getInstance("X.509", "INFOSEC");
+						X509Certificate signCer = (X509Certificate) cf
+								.generateCertificate(new ByteArrayInputStream(Base64.decode(signCerStr)));
+						req.setCrossChecker(signCer);
+						req.setCrossCheckSignAlg(IHSM.SHA1withRSA);
+						close();
+					} catch (Exception e1) {
+						log.errlog("Certificate Operation exception", e1);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_CertificateOperation"));
+						mb.open();
+						return;
+					}
+				}
+			}
+		});
+		return container;
+	}
+	// 匹配 根证书颁发的 SM2 的证书
+	private CertContainer[] getMatchIssuerSM2Cert(CertContainer[] cc) {
+		List<CertContainer> matchSKFList = new ArrayList<CertContainer>();
+		for (int i = 0; i < cc.length; i++) {
+			if (isIssuerMatch(cc[i].getCert().getIssuerDN().getName())) {
+				matchSKFList.add(cc[i]);
+			}
+		}
+		CertContainer[] matchCSPs = new CertContainer[matchSKFList.size()];
+		for (int i = 0; i < matchSKFList.size(); i++) {
+			matchCSPs[i] = matchSKFList.get(i);
+		}
+		return matchCSPs;
+	}
+
+	// 匹配 根证书颁发的 RSA 的证书
+	private CspCertInfo[] getMatchIssuerRSACert(CspCertInfo[] cspList) {
+		List<CspCertInfo> matchCSPList = new ArrayList<CspCertInfo>();
+		for (int i = 0; i < cspList.length; i++) {
+			if (isIssuerMatch(cspList[i].issuer)) {
+				matchCSPList.add(cspList[i]);
+			}
+		}
+		CspCertInfo[] matchCSPs = new CspCertInfo[matchCSPList.size()];
+		for (int i = 0; i < matchCSPList.size(); i++) {
+			matchCSPs[i] = matchCSPList.get(i);
+		}
+		return matchCSPs;
+	}
+
+	// 证书 DN 匹配 issuerDN
+	private boolean isIssuerMatch(String userDN) {
+		try {
+			String dn = DNItemReverseUtil.bigEnding(userDN);
+			return DNItemReverseUtil.bigEnding(Env.issuerDN).equalsIgnoreCase(dn);
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	/**
+	 * 返回 request  
+	 * @Author 江岩 
+	 * @Time   2019-06-10 17:42
+	 * @version 1.0
+	 */
+	public Request getRequest() {
+		return req;
+	}
+
+	/**
+	 * 视图标题栏命名
+	 * @param   (shell)   
+	 * @Author 江岩      
+	 * @Time 2019-06-10 17:41
+	 * @version 1.0
+	 */
+	@Override
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		shell.setText(l.getString("reviewOperate"));
+		shell.setImage(new Image(shell.getDisplay(), "res/logo.png"));
+	}
+}

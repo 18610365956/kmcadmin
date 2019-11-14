@@ -1,0 +1,300 @@
+package cn.com.infosec.netcert.kmcAdmin.ui.admin;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
+
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.StatusLineManager;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.window.ApplicationWindow;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+
+import cn.com.infosec.asn1.x509.X509Name;
+import cn.com.infosec.netcert.base.Request;
+import cn.com.infosec.netcert.framework.crypto.CryptoException;
+import cn.com.infosec.netcert.framework.crypto.IHSM;
+import cn.com.infosec.netcert.framework.crypto.SM2Id;
+import cn.com.infosec.netcert.framework.crypto.impl.SoftCryptoAndStore;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.CertContainer;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.CspCertInfo;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.NeedPinException;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeyCSPImpl;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl;
+import cn.com.infosec.netcert.framework.log.FileLogger;
+import cn.com.infosec.netcert.framework.utils.DNItemReverseUtil;
+import cn.com.infosec.netcert.kmcAdmin.ui.login.Panel_ChooseCert;
+import cn.com.infosec.netcert.kmcAdmin.utils.Env;
+import cn.com.infosec.netcert.kmcAdmin.utils.Env.ALG;
+import cn.com.infosec.util.Base64;
+
+/**   
+ * @Description (补充描述) 
+ * @Author 江岩    
+ * @Time 2019-08-20 10:38
+ */
+public class Panel_WriteKey extends ApplicationWindow {
+
+	private Combo combo_dev, combo_devSN;
+
+	private CertContainer[] cc;
+	private CertContainer chooseCert;
+	private CspCertInfo[] cspList;
+	private CspCertInfo chooseCsp;
+	private UsbKeySKFImpl userSkf;
+	private UsbKeyCSPImpl userCSP;
+	private Request req;
+
+	public Map<String, UsbKeySKFImpl> map;
+	private String lib, keyDriverLibPath;
+
+	private Properties pro;
+	private FileLogger log = FileLogger.getLogger(this.getClass());
+	private static ResourceBundle l = Env.getLanguage();
+	/**
+	 * Create the application window.
+	 */
+	public Panel_WriteKey() {
+		super(null);
+		addToolBar(SWT.FLAT | SWT.WRAP);
+	}
+
+	/**
+	 * 视图页面  
+	 * @Author 江岩      
+	 * @Time 2019-06-10 17:40
+	 * @version 1.0
+	 */
+	@Override
+	protected Control createContents(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.marginBottom = 50;
+		gridLayout.marginLeft = 30;
+		gridLayout.marginRight = 40;
+		gridLayout.marginTop = 30;
+		gridLayout.verticalSpacing = 15;
+		container.setLayout(gridLayout);
+
+		Label lbl_USBkey = new Label(container, SWT.NONE);
+		GridData gd_lbl_USBkey = new GridData(SWT.RIGHT);
+		gd_lbl_USBkey.horizontalAlignment = SWT.RIGHT;
+		lbl_USBkey.setLayoutData(gd_lbl_USBkey);
+		lbl_USBkey.setAlignment(SWT.RIGHT);
+		if (ALG.SM2 == Env.alg) {
+			lbl_USBkey.setText(l.getString("keyDriver") + "：");
+		} else {
+			lbl_USBkey.setText(l.getString("CSP") + "：");
+		}
+
+		combo_dev = new Combo(container, SWT.READ_ONLY);
+		GridData gd_combo_dev = new GridData(SWT.LEFT);
+		gd_combo_dev.widthHint = 208;
+		combo_dev.setLayoutData(gd_combo_dev);
+
+		if (ALG.SM2 == Env.alg) {
+			@SuppressWarnings("unchecked")
+			Enumeration<String> keyList = (Enumeration<String>) pro.propertyNames();
+			while (keyList.hasMoreElements()) {
+				combo_dev.add(keyList.nextElement());
+			}
+			if (combo_dev.getItemCount() != 0) {
+				combo_dev.select(0);
+				keyDriverLibPath = pro.getProperty(combo_dev.getText().trim());
+			}
+
+			Label lbl_serialNum = new Label(container, SWT.NONE);
+			GridData gd_lbl_serialNum = new GridData(SWT.RIGHT);
+			gd_lbl_serialNum.horizontalAlignment = SWT.RIGHT;
+			lbl_serialNum.setLayoutData(gd_lbl_serialNum);
+			lbl_serialNum.setAlignment(SWT.RIGHT);
+			lbl_serialNum.setText(l.getString("SN") + "：");
+
+			combo_devSN = new Combo(container, SWT.READ_ONLY);
+			GridData gd_combo_devSN = new GridData(SWT.LEFT);
+			gd_combo_devSN.widthHint = 208;
+			combo_devSN.setLayoutData(gd_combo_devSN);
+
+			combo_dev.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent arg0) {
+					combo_devSN.removeAll();
+					keyDriverLibPath = pro.getProperty(combo_dev.getText());
+					try {
+						String[] devItems = UsbKeySKFImpl.enumDev(keyDriverLibPath);
+						for (String s : devItems) {
+							combo_devSN.add(s);
+						}
+						if (devItems.length != 0) {
+							combo_devSN.select(0);
+						}
+					} catch (CryptoException e) {
+						log.errlog("Enum device", e);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_enumDev"));
+						mb.open();
+					}
+				}
+			});
+		} else {
+			String[] pro = UsbKeyCSPImpl.listProvider();
+			for (String s : pro) {
+				combo_dev.add(s);
+			}
+			if (pro.length != 0) {
+				combo_dev.select(0);
+			}
+		}
+		new Label(container, SWT.NONE);
+
+		Button btn_review = new Button(container, SWT.NONE);
+		btn_review.setText(l.getString("OK"));
+		GridData gd_btn_review = new GridData(SWT.CENTER);
+		gd_btn_review.horizontalAlignment = SWT.CENTER;
+		gd_btn_review.widthHint = 76;
+		btn_review.setLayoutData(gd_btn_review);
+
+		btn_review.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (ALG.SM2 == Env.alg
+						&& (combo_devSN.getText().trim() == null || combo_devSN.getText().length() == 0)) {
+					MessageBox mb = new MessageBox(getShell());
+					mb.setMessage(l.getString("Notice_null_SN"));
+					mb.open();
+					return;
+				}
+				if (ALG.SM2 == Env.alg) { // SM2
+					try {
+						userSkf = new UsbKeySKFImpl(keyDriverLibPath, combo_devSN.getText().trim());
+						Env.getMap().put(pro.getProperty(combo_dev.getText()) + combo_devSN.getText().trim(), userSkf);
+					} catch (CryptoException ee) {
+						log.errlog("New SKF fail", ee);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_newSKF"));
+						mb.open();
+						return;
+					}
+
+					byte[] checkerSign = null;
+					try {
+						try {
+							String[] p10 = userSkf.genCSR(256, new X509Name("cn=test"));
+							String contain = p10[0];
+							String pub = p10[1];
+							//userSkf.importEncKeyPair(contain, arg1, arg2);
+							
+						} catch (NeedPinException ee) {
+							Panel_VerifyPin verifyPin = new Panel_VerifyPin();
+							verifyPin.setBlockOnOpen(true);
+							int w = verifyPin.open();
+							if (w != 0) {
+								return;
+							} else {
+								int result = userSkf.verifyPIN(verifyPin.pin);
+								if (result == 0) {
+									//userSkf.importEncKeyPair(arg0, arg1, arg2);
+								} else {
+									MessageBox mb = new MessageBox(getShell());
+									mb.setMessage(l.getString("Notice_error_PIN"));
+									mb.open();
+									return;
+								}
+							}
+						}	
+					} catch (CryptoException ce) {
+						log.errlog("Sign fail", ce);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_skfSign"));
+						mb.open();
+						return;
+					}
+				} else { // RSA
+					lib = combo_dev.getText().trim();
+					userCSP = new UsbKeyCSPImpl(lib);
+					cspList = userCSP.listCert(IHSM.SIGN);
+					
+					
+					byte[] hash = null;
+					userCSP = new UsbKeyCSPImpl(combo_dev.getText().trim());
+					hash = req.getSignatureValue().getBytes();
+
+					try {
+						String[] p10 = userCSP.genP10(1024, "cn=test");
+						String container = p10[0];
+						String p10_key = p10[1];
+						
+						//userCSP.importEncKeyPair(container, paramString2, paramString3, paramString4);
+					} catch (Exception e1) {
+						log.errlog("Sign fail/Base64 encode error", e1);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_CSPSign"));
+						mb.open();
+						return;
+					}
+					try {
+						String signCerStr = userCSP.exportCertBase64(IHSM.SIGN, chooseCsp.container);
+						CertificateFactory cf = CertificateFactory.getInstance("X.509", "INFOSEC");
+						X509Certificate signCer = (X509Certificate) cf
+								.generateCertificate(new ByteArrayInputStream(Base64.decode(signCerStr)));
+						req.setCrossChecker(signCer);
+						req.setCrossCheckSignAlg(IHSM.SHA1withRSA);
+						close();
+					} catch (Exception e1) {
+						log.errlog("Certificate Operation exception", e1);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_CertificateOperation"));
+						mb.open();
+						return;
+					}
+				}
+			}
+		});
+		return container;
+	}
+
+	/**
+	 * 返回 request  
+	 * @Author 江岩 
+	 * @Time   2019-06-10 17:42
+	 * @version 1.0
+	 */
+	public Request getRequest() {
+		return req;
+	}
+
+	/**
+	 * 视图标题栏命名
+	 * @param   (shell)   
+	 * @Author 江岩      
+	 * @Time 2019-06-10 17:41
+	 * @version 1.0
+	 */
+	@Override
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		shell.setText(l.getString("writeKey"));
+		shell.setImage(new Image(shell.getDisplay(), "res/logo.png"));
+	}
+}

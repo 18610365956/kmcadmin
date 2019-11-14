@@ -1,0 +1,228 @@
+package cn.com.infosec.netcert.kmcAdmin.ui.admin;
+
+import java.util.Properties;
+import java.util.ResourceBundle;
+import org.eclipse.jface.window.ApplicationWindow;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Button;
+
+import cn.com.infosec.netcert.framework.ServerException;
+import cn.com.infosec.netcert.framework.log.FileLogger;
+import cn.com.infosec.netcert.kmcAdmin.utils.Env;
+import cn.com.infosec.netcert.kmcAdmin.utils.Env.ALG;
+
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
+
+/**
+ * 预产生密钥
+ * @Author 江岩
+ * @Time 2019-06-10 17:47
+ */
+public class Panel_GenKey extends ApplicationWindow {
+	private Label lb_cnt;
+	private Spinner cnt;
+	private FileLogger log = FileLogger.getLogger(this.getClass());
+	private static ResourceBundle l = Env.getLanguage();
+	/**
+	 * 构造方法
+	 */
+	public Panel_GenKey() {
+		super(null);
+		setShellStyle(SWT.CLOSE);
+		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
+	}
+
+	/**
+	 * 视图页面
+	 * 
+	 * @Author 江岩
+	 * @Time 2019-06-10 17:48
+	 * @version 1.0
+	 * @todo wait_verify
+	 */
+	@Override
+	protected Control createContents(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.marginBottom = 40;
+		gridLayout.marginLeft = 30;
+		gridLayout.marginTop = 30;
+		gridLayout.marginRight = 40;
+		gridLayout.verticalSpacing = 15;
+		container.setLayout(gridLayout);
+
+		Label lbl_keyType = new Label(container, SWT.NONE);
+		lbl_keyType.setText(l.getString("keyType") + "：");
+		GridData gd_lbl_keyType = new GridData(SWT.RIGHT);
+		gd_lbl_keyType.widthHint = 71;
+		gd_lbl_keyType.horizontalAlignment = SWT.RIGHT;
+		lbl_keyType.setLayoutData(gd_lbl_keyType);
+		lbl_keyType.setAlignment(SWT.RIGHT);
+
+		Label lbl_alg = new Label(container, SWT.NONE);
+		
+		Label lbl_keyLenght = new Label(container, SWT.NONE);
+		GridData gd_lbl_keyLenght = new GridData(SWT.RIGHT);
+		gd_lbl_keyLenght.horizontalAlignment = SWT.RIGHT;
+		lbl_keyLenght.setLayoutData(gd_lbl_keyLenght);
+		lbl_keyLenght.setAlignment(SWT.RIGHT);
+		lbl_keyLenght.setText(l.getString("keyLength") + "：");
+		
+		Combo combo_length = new Combo(container, SWT.NONE | SWT.READ_ONLY);
+		GridData gd_combo = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_combo.widthHint = 86;
+		combo_length.setLayoutData(gd_combo);
+
+		if (ALG.SM2 == Env.alg) {
+			lbl_alg.setText("SM2");
+			combo_length.setText("256");
+		} else {
+			lbl_alg.setText("RSA");
+			combo_length.add("1024");
+			combo_length.add("2048");
+			combo_length.setText("1024");
+		}
+		
+		Label lbl_genNum = new Label(container, SWT.NONE);
+		GridData gd_lbl_genNum = new GridData(SWT.RIGHT);
+		gd_lbl_genNum.widthHint = 73;
+		gd_lbl_genNum.horizontalAlignment = SWT.RIGHT;
+		lbl_genNum.setLayoutData(gd_lbl_genNum);
+		lbl_genNum.setAlignment(SWT.RIGHT);
+		lbl_genNum.setText(l.getString("gen_num") + "：");
+
+		cnt = new Spinner(container, SWT.BORDER);
+		GridData gd_cnt = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_cnt.widthHint = 87;
+		cnt.setLayoutData(gd_cnt);
+		cnt.setMaximum(99999);
+		cnt.setMinimum(1);
+
+		Label lbl_currNum = new Label(container, SWT.NONE);
+		GridData gd_lbl_currNum = new GridData(SWT.RIGHT);
+		gd_lbl_currNum.widthHint = 73;
+		gd_lbl_currNum.horizontalAlignment = SWT.RIGHT;
+		lbl_currNum.setLayoutData(gd_lbl_currNum);
+		lbl_currNum.setAlignment(SWT.RIGHT);
+		lbl_currNum.setText(l.getString("curr_num") + "：");
+
+		lb_cnt = new Label(container, SWT.NONE);
+
+		Label lbl_refresh = new Label(container, SWT.NONE);
+		lbl_refresh.setImage(new Image(getShell().getDisplay(), "res/refresh.png"));
+		lbl_refresh.addMouseListener(new MouseAdapter() {
+			public void mouseDown(MouseEvent me) {
+				if (me.button == 1) {
+					countKeys();
+				}
+			}
+		});
+
+		Button btn_genKey = new Button(container, SWT.NONE);
+		GridData gd_btn_genKey = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btn_genKey.widthHint = 111;
+		btn_genKey.setLayoutData(gd_btn_genKey);
+		btn_genKey.setText(l.getString("gen_key"));
+
+		btn_genKey.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+					Properties p = new Properties();
+					p.setProperty("KEYALG", lbl_alg.getText().trim());
+					p.setProperty("KEYLENGTH", combo_length.getText().trim());
+					p.setProperty("COUNT", cnt.getText());
+					try {
+						Env.client.sendRequest("GENPREKEY", p);
+						MessageBox mb = new MessageBox(getShell()); 
+						mb.setMessage(l.getString("Notice_serverKeyGenerating")+"...");
+						mb.open();
+					} catch (ServerException se) {
+						log.errlog("Pre_generate key fail", se);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_preGenKey") + "[" + se.getErrorNum() + "]："
+								+ se.getErrorMsg());
+						mb.open();
+					} catch (Exception ee) {
+						log.errlog("Pre_generate key fail", ee);
+						MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+						mb.setMessage(l.getString("Notice_fail_preGenKey"));
+						mb.open();
+					}
+				}
+		});
+		countKeys();
+		return container;
+	}
+
+	/**
+	 * 密钥统计  
+	 * @Author 江岩 
+	 * @Time   2019-06-10 17:49
+	 * @version 1.0
+	 */
+	private void countKeys() {
+		Properties p = new Properties();
+		p.setProperty("RANGE", "pre");
+
+		try {
+			Properties r = Env.client.sendRequest("COUNTKEYS", p).getData();
+			int n = Integer.parseInt(r.getProperty("KEYNUMBERS", "0"));
+			lb_cnt.setText(String.valueOf(n));
+		} catch (ServerException se) {
+			log.errlog("Count key fail", se);
+			MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+			mb.setMessage(
+					l.getString("Notice_fail_countKeyNum") + "[" + se.getErrorNum() + "]：" + se.getErrorMsg());
+			mb.open();
+		} catch (Exception ee) {
+			log.errlog("Count key fail", ee);
+			MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+			mb.setMessage(l.getString("Notice_fail_countKeyNum"));
+			mb.open();
+		}
+	}
+
+	/**
+	 * 视图标题栏命名  
+	 * @Author 江岩      
+	 * @Time 2019-06-10 17:49
+	 * @version 1.0
+	 */
+	@Override
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		shell.setText(l.getString("pre_genKey"));
+		shell.setImage(new Image(shell.getDisplay(), "res/logo.png"));
+	}
+	/**
+	 * 重写窗口关闭事件
+	 * @Description 在关闭窗口之前，释放占用的key资源
+	 * @Author 江岩
+	 * @Time 2019-06-04 19:20
+	 * @version 1.0
+	 */
+	@Override
+	public void handleShellCloseEvent() {
+		int closeCode = -1;
+		MessageBox messagebox = new MessageBox(getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messagebox.setMessage(l.getString("Notice_exit") + "?");
+		closeCode = messagebox.open();
+		if (closeCode == SWT.YES) {
+			super.handleShellCloseEvent();
+		}
+	}
+}

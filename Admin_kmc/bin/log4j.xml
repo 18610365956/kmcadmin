@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">  
+     
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/' >  
+   
+    <appender name="errorLog" class="org.apache.log4j.RollingFileAppender">  
+        <param name="File" value="log/error.log" />    
+        <param name="MaxFileSize" value="10MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="org.apache.log4j.PatternLayout">  
+        	<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss,SSS}] - %m%n" />  
+        </layout>    
+        <!--过滤器设置输出的级别-->  
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">  
+            <param name="levelMin" value="info" />  
+            <param name="levelMax" value="info" />  
+            <param name="AcceptOnMatch" value="true" />  
+        </filter>  
+    </appender>  
+    <logger name="error" additivity="false">  
+        <level value ="info"/>    
+        <appender-ref ref="errorLog" />    
+    </logger> 
+     
+</log4j:configuration>
+<!--
+    <appender name="infoLog" class="org.apache.log4j.RollingFileAppender">     
+        <param name="File" value="log/system.log" /> 
+        <param name="MaxFileSize" value="10MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="org.apache.log4j.PatternLayout">  
+            <param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss,SSS}] - %m%n" />  
+        </layout>  
+         
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">  
+            <param name="levelMin" value="info" />  
+            <param name="levelMax" value="info" />  
+            <param name="AcceptOnMatch" value="true" />  
+        </filter>  
+    </appender>  
+    
+    <appender name="debugLog" class="org.apache.log4j.RollingFileAppender">  
+        <param name="File" value="log/debug.log" />    
+        <param name="MaxFileSize" value="10MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="org.apache.log4j.PatternLayout">  
+        	<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss,SSS}] - %m%n" />  
+        </layout>    
+  
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">  
+            <param name="levelMin" value="info" />  
+            <param name="levelMax" value="info" />  
+            <param name="AcceptOnMatch" value="true" />  
+        </filter>  
+    </appender>  
+
+    <appender name="accessLog" class="org.apache.log4j.RollingFileAppender">  
+        <param name="File" value="log/access.log" />    
+        <param name="MaxFileSize" value="10MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="org.apache.log4j.PatternLayout">  
+        	<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss,SSS}] - %m%n" />  
+        </layout>    
+ 
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">  
+            <param name="levelMin" value="info" />  
+            <param name="levelMax" value="info" />  
+            <param name="AcceptOnMatch" value="true" />  
+        </filter>  
+    </appender>  
+ 
+    <logger name="system" additivity="false">  
+        <level value ="info"/>    
+        <appender-ref ref="infoLog" />    
+    </logger>  
+  
+    <logger name="debug" additivity="false">  
+        <level value ="info"/>    
+        <appender-ref ref="debugLog" />    
+    </logger>
+    <logger name="access" additivity="false">  
+        <level value ="info"/>    
+        <appender-ref ref="accessLog" />    
+    </logger>  
+-->

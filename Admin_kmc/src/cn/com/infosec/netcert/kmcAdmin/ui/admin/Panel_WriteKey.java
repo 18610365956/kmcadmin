@@ -1,0 +1,235 @@
+package cn.com.infosec.netcert.kmcAdmin.ui.admin;
+
+import java.io.File;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
+
+import org.eclipse.jface.window.ApplicationWindow;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+
+import cn.com.infosec.netcert.framework.crypto.CryptoException;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.NeedPinException;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeyCSPImpl;
+import cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl;
+import cn.com.infosec.netcert.framework.log.FileLogger;
+import cn.com.infosec.netcert.kmcAdmin.ui.login.Panel_MessageDialog;
+import cn.com.infosec.netcert.kmcAdmin.utils.Env;
+import cn.com.infosec.netcert.kmcAdmin.utils.Env.ALG;
+
+/**   
+ * @Author 江岩    
+ * @Time 2019-08-20 10:38
+ */
+public class Panel_WriteKey extends ApplicationWindow {
+
+	private Combo combo_dev, combo_devSN;
+	private UsbKeySKFImpl userSkf;
+
+	public Map<String, UsbKeySKFImpl> map;
+	private String keyDriverLibPath;
+	private String kmc_resp_prv_key;
+	private Properties pro;
+	private FileLogger log = FileLogger.getLogger(this.getClass());
+	private static ResourceBundle l = Env.getLanguage();
+
+	/**
+	 * Create the application window.
+	 */
+	public Panel_WriteKey(String kmc_resp_prv_key) {
+		super(null);
+		setShellStyle(SWT.MIN);
+		setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
+		try {
+			Env.initConfig();
+			if (Env.alg == ALG.SM2) {
+				File f = new File(Env.keyConfigFile);
+				if(!f.exists()) {
+					f.createNewFile();
+				}
+				pro = Env.getProperties(f);
+			}
+		} catch (Exception e) {
+			log.errlog("Load keyConfigFile fail.", e);
+			Panel_MessageDialog dialog = new Panel_MessageDialog("error", "Load keyConfigFile fail.");
+			dialog.setBlockOnOpen(true);
+			dialog.open();
+			return;
+		}
+		this.kmc_resp_prv_key = kmc_resp_prv_key;
+	}
+
+	/**
+	 * 视图页面  
+	 * @Author 江岩      
+	 * @Time 2019-06-10 17:40
+	 * @version 1.0
+	 */
+	@Override
+	protected Control createContents(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.marginBottom = 50;
+		gridLayout.marginLeft = 30;
+		gridLayout.marginRight = 40;
+		gridLayout.marginTop = 30;
+		gridLayout.verticalSpacing = 15;
+		container.setLayout(gridLayout);
+
+		Label lbl_USBkey = new Label(container, SWT.NONE);
+		GridData gd_lbl_USBkey = new GridData(SWT.RIGHT);
+		gd_lbl_USBkey.horizontalAlignment = SWT.RIGHT;
+		lbl_USBkey.setLayoutData(gd_lbl_USBkey);
+		lbl_USBkey.setAlignment(SWT.RIGHT);
+		lbl_USBkey.setText(l.getString("driverName") + "：");
+
+		combo_dev = new Combo(container, SWT.READ_ONLY);
+		GridData gd_combo_dev = new GridData(SWT.LEFT);
+		gd_combo_dev.widthHint = 208;
+		combo_dev.setLayoutData(gd_combo_dev);
+		combo_dev.add(l.getString("Please_choose_keyFile"));
+		
+		if (ALG.SM2 == Env.alg) {
+			@SuppressWarnings("unchecked")
+			Enumeration<String> keyList = (Enumeration<String>) pro.propertyNames();
+			while (keyList.hasMoreElements()) {
+				combo_dev.add(keyList.nextElement());
+			}
+			if (combo_dev.getItemCount() != 0) {
+				combo_dev.select(0);
+				keyDriverLibPath = pro.getProperty(combo_dev.getText().trim());
+			}
+
+			Label lbl_serialNum = new Label(container, SWT.NONE);
+			GridData gd_lbl_serialNum = new GridData(SWT.RIGHT);
+			gd_lbl_serialNum.horizontalAlignment = SWT.RIGHT;
+			lbl_serialNum.setLayoutData(gd_lbl_serialNum);
+			lbl_serialNum.setAlignment(SWT.RIGHT);
+			lbl_serialNum.setText(l.getString("SN") + "：");
+
+			combo_devSN = new Combo(container, SWT.READ_ONLY);
+			GridData gd_combo_devSN = new GridData(SWT.LEFT);
+			gd_combo_devSN.widthHint = 208;
+			combo_devSN.setLayoutData(gd_combo_devSN);
+
+			combo_dev.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent arg0) {
+					combo_devSN.removeAll();
+					if (combo_dev.getSelectionIndex() != 0) {
+						keyDriverLibPath = pro.getProperty(combo_dev.getText());
+						try {
+							String[] devItems = UsbKeySKFImpl.enumDev(keyDriverLibPath);
+							for (String s : devItems) {
+								combo_devSN.add(s);
+							}
+							if (devItems.length != 0) {
+								combo_devSN.select(0);
+							}
+						} catch (CryptoException e) {
+							log.errlog("Enum device", e);
+							MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+							mb.setMessage(l.getString("Notice_fail_enumDev"));
+							mb.open();
+						}
+					}
+				}
+			});
+		} else {
+			String[] pro = UsbKeyCSPImpl.listProvider();
+			for (String s : pro) {
+				combo_dev.add(s);
+			}
+			if (pro.length != 0) {
+				combo_dev.select(0);
+			}
+		}
+		new Label(container, SWT.NONE);
+
+		Button btn_writeKey = new Button(container, SWT.NONE);
+		btn_writeKey.setText(l.getString("OK"));
+		GridData gd_btn_review = new GridData(SWT.CENTER);
+		gd_btn_review.horizontalAlignment = SWT.CENTER;
+		gd_btn_review.widthHint = 76;
+		btn_writeKey.setLayoutData(gd_btn_review);
+
+		btn_writeKey.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (combo_devSN.getText() == null || combo_devSN.getText().length() == 0) {
+					MessageBox mb = new MessageBox(getShell());
+					mb.setMessage(l.getString("Notice_null_SN"));
+					mb.open();
+					return;
+				}
+				try {
+					userSkf = new UsbKeySKFImpl(keyDriverLibPath, combo_devSN.getText().trim());
+					Env.getMap().put(pro.getProperty(combo_dev.getText()) + combo_devSN.getText().trim(), userSkf);
+				} catch (CryptoException ee) {
+					log.errlog("New SKF fail", ee);
+					MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+					mb.setMessage(l.getString("Notice_fail_newSKF"));
+					mb.open();
+					return;
+				}
+				try {
+					try {
+						userSkf.writeFile("CatchPollKey", kmc_resp_prv_key.getBytes());
+					} catch (NeedPinException ee) {
+						Panel_VerifyPin verifyPin = new Panel_VerifyPin();
+						verifyPin.setBlockOnOpen(true);
+						int w = verifyPin.open();
+						if (w != 0) {
+							return;
+						} else {
+							int result = userSkf.verifyPIN(verifyPin.pin);
+							if (result == 0) {
+								userSkf.writeFile("CatchPollKey", kmc_resp_prv_key.getBytes());
+							} else {
+								MessageBox mb = new MessageBox(getShell());
+								mb.setMessage(l.getString("Notice_error_PIN"));
+								mb.open();
+								return;
+							}
+						}
+					}
+					close();
+				} catch (CryptoException ce) {
+					log.errlog("Write key fail", ce);
+					MessageBox mb = new MessageBox(getShell(), SWT.ERROR);
+					mb.setMessage(l.getString("Notice_fail_writeKey"));
+					mb.open();
+					return;
+				}
+			}
+		});
+		return container;
+	}
+
+	/**
+	 * 视图标题栏命名
+	 * @param   (shell)   
+	 * @Author 江岩      
+	 * @Time 2019-06-10 17:41
+	 * @version 1.0
+	 */
+	@Override
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		shell.setText(l.getString("writeKey"));
+		shell.setImage(new Image(shell.getDisplay(), "res/logo.png"));
+	}
+}

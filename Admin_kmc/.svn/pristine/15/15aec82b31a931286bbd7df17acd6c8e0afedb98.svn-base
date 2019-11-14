@@ -1,0 +1,96 @@
+package cn.com.infosec.netcert.kmcAdmin.ui.login;
+
+import java.util.ResourceBundle;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.wb.swt.SWTResourceManager;
+
+import cn.com.infosec.netcert.kmcAdmin.utils.Env;
+
+/**   
+ * 信息提示窗口
+ * @Author 江岩    
+ * @Time 2019-08-02 20:20
+ */
+public class Panel_Dialog {
+
+	private static Text text;
+	private static ResourceBundle l = Env.getLanguage();
+	/**
+	 * 信息提示框
+	 * @param   (type, message)   
+	 * @Author 江岩 
+	 * @Time   2019-08-02 20:35
+	 * @version 1.0
+	 */
+	public static void messageDialog(String type, String message) {
+		
+		final Display display = new Display();
+		final Shell shell = new Shell(display, SWT.DIALOG_TRIM);
+		GridLayout grid = new GridLayout();
+		grid.marginLeft = 15;
+		grid.horizontalSpacing = 10;
+		grid.numColumns = 4;
+		shell.setLayout(grid);
+		shell.setText("Infomation");
+		shell.setSize(350, 152);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+
+		Label label1 = new Label(shell, SWT.NONE);
+		label1.setImage(display.getSystemImage(SWT.ICON_ERROR));
+		if ("error".equalsIgnoreCase(type)) {
+			label1.setImage(display.getSystemImage(SWT.ICON_ERROR));
+		} else if ("warnning".equalsIgnoreCase(type)) {
+			label1.setImage(display.getSystemImage(SWT.ICON_ERROR));
+		} else if ("infomation".contentEquals(type)) {
+			label1.setImage(display.getSystemImage(SWT.ICON_INFORMATION));
+		} else if ("question".equalsIgnoreCase(type)) {
+			label1.setImage(display.getSystemImage(SWT.ICON_QUESTION));
+		}
+
+		text = new Text(shell, SWT.NONE | SWT.WRAP | SWT.READ_ONLY);
+		text.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+		text.setText(message);
+
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+		new Label(shell, SWT.NONE);
+
+		Button btn_ok = new Button(shell, SWT.NONE);
+		GridData gd_btn_ok = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gd_btn_ok.widthHint = 65;
+		btn_ok.setLayoutData(gd_btn_ok);
+		btn_ok.setText(l.getString("OK"));
+		shell.open();
+		shell.layout();
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch())
+				display.sleep();
+		}
+	}
+
+	/**   
+	 * test 方法     
+	 * @Author 江岩 
+	 * @Time   2019-08-02 20:20
+	 * @version 1.0 
+	 */
+	public static void main(String[] args) {
+		messageDialog("error", "异常出现了 异常出现了异常出现了异常出现了异常出现了异常出现了.");
+	}
+}

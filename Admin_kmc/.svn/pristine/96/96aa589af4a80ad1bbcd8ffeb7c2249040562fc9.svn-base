@@ -1,0 +1,117 @@
+package cn.com.infosec.netcert.kmcAdmin.ui.login;
+
+import java.util.ResourceBundle;
+import org.eclipse.jface.window.ApplicationWindow;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.wb.swt.SWTResourceManager;
+import cn.com.infosec.netcert.kmcAdmin.utils.Env;
+
+
+/**   
+ * 信息提示框 
+ * @Author 江岩    
+ * @Time 2019-08-27 13:31
+ */
+public class Panel_MessageDialog extends ApplicationWindow {
+	private Text text;
+	private String type;
+	private String message;
+	private ResourceBundle l = Env.getLanguage();
+
+	/**
+	 * Create the application window.
+	 */
+	public Panel_MessageDialog(String type, String message) {
+		super(null);
+		addToolBar(SWT.FLAT | SWT.WRAP);
+		this.type = type;
+		this.message = message;
+	}
+
+	/**
+	 * Create contents of the application window.
+	 * @param parent
+	 */
+	@Override
+	protected Control createContents(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		Label label1 = new Label(container, SWT.NONE);
+		label1.setBounds(21, 20, 50, 50);
+		
+		label1.setImage(new Image(getShell().getDisplay(), "res/error.png"));
+		if ("error".equalsIgnoreCase(type)) {
+			label1.setImage(new Image(getShell().getDisplay(), "res/error.png"));
+		}
+		
+		text = new Text(container, SWT.NONE | SWT.WRAP | SWT.READ_ONLY);
+		text.setBounds(95, 20, 311, 69);
+		text.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		text.setText(message);
+		
+		Button btn_ok = new Button(container, SWT.NONE);
+		btn_ok.setBounds(311, 95, 80, 27);
+		btn_ok.setText(l.getString("OK"));
+		btn_ok.setFocus();
+		btn_ok.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				close();
+			}
+		});
+		return container;
+	}
+
+	public static void messageD(String type,String message, Display display) {
+		try {
+			Panel_MessageDialog window = new Panel_MessageDialog(type, message);
+			window.setBlockOnOpen(true);
+			window.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String args[]) {
+		try {
+			String type = "error";
+			String message = "Login fail";
+			Display display = new Display();
+			Panel_MessageDialog window = new Panel_MessageDialog(type, message);
+			window.setBlockOnOpen(true);
+			window.open();
+			Display.getCurrent().dispose();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Configure the shell.
+	 * @param newShell
+	 */
+	@Override
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		shell.setText(l.getString("notice"));
+		shell.setImage(new Image(shell.getDisplay(), "res/logo.png"));
+	}
+
+	/**
+	 * Return the initial size of the window.
+	 */
+	@Override
+	protected Point getInitialSize() {
+		return new Point(432, 176);
+	}
+}

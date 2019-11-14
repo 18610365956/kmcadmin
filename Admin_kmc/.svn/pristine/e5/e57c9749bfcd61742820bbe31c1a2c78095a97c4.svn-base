@@ -1,0 +1,1 @@
+jre\bin\java -classpath .;./lib/*;./lib/windows/* cn.com.infosec.netcert.kmcAdmin.ui.login.Login

@@ -1,0 +1,338 @@
+[2019-11-07 16:11:55,552] - [cn.com.infosec.netcert.kmcAdmin.ui.admin.Panel_CountKeys] Query CA status
+java.lang.NullPointerException
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.Panel_CountKeys.loadCAinnerName(Panel_CountKeys.java:257)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.Panel_CountKeys.createContents(Panel_CountKeys.java:228)
+	at org.eclipse.jface.window.Window.create(Window.java:432)
+	at org.eclipse.jface.window.Window.open(Window.java:791)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.Panel_CountKeys.main(Panel_CountKeys.java:241)
+[2019-11-07 16:27:34,523] - [cn.com.infosec.netcert.kmcAdmin.ui.admin.Panel_CountKeys] Query CA status
+java.lang.NullPointerException
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.Panel_CountKeys.loadCAinnerName(Panel_CountKeys.java:257)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.Panel_CountKeys.createContents(Panel_CountKeys.java:228)
+	at org.eclipse.jface.window.Window.create(Window.java:432)
+	at org.eclipse.jface.window.Window.open(Window.java:791)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.Panel_CountKeys.main(Panel_CountKeys.java:241)
+[2019-11-07 16:41:31,016] - [cn.com.infosec.netcert.kmcAdmin.ui.admin.AO] Query log fail
+java.lang.NullPointerException
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.AO.search(AO.java:532)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.AO.access$6(AO.java:505)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.AO$3.widgetSelected(AO.java:380)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.AO.main(AO.java:644)
+[2019-11-07 17:12:51,987] - [cn.com.infosec.netcert.kmcAdmin.ui.admin.AO] Query log fail
+java.lang.NullPointerException
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.AO.search(AO.java:539)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.AO.access$6(AO.java:506)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.AO$9.mouseUp(AO.java:491)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:220)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$2.widgetSelected(Login.java:312)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.main(Login.java:414)
+[2019-11-08 09:38:19,673] - [cn.com.infosec.netcert.kmcAdmin.ui.login.Login] Login fail
+cn.com.infosec.netcert.framework.ServerException: Error Number:100101
+Error Message查询用户信息时出错
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.send(KMClient.java:200)
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.sendRequest(KMClient.java:123)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$2.widgetSelected(Login.java:284)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.main(Login.java:414)
+[2019-11-08 09:50:00,348] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:00,357] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:00,366] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:00,377] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:00,389] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:00,402] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:00,417] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:00,427] - [cn.com.infosec.netcert.kmcAdmin.ui.admin.BO] RECOVERBYCATCHPOLL fail
+java.lang.NullPointerException
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.BO$2.handleEvent(BO.java:187)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$2.widgetSelected(Login.java:307)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.main(Login.java:414)
+[2019-11-08 09:50:15,053] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:15,061] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:15,070] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:15,080] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:15,091] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:15,105] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:15,120] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:3CA944211854190C] error: ret=0xa00001b
+[2019-11-08 09:50:15,129] - [cn.com.infosec.netcert.kmcAdmin.ui.admin.BO] RECOVERBYCATCHPOLL fail
+java.lang.NullPointerException
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.BO$2.handleEvent(BO.java:187)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$2.widgetSelected(Login.java:307)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.main(Login.java:414)
+[2019-11-08 09:58:49,945] - [cn.com.infosec.netcert.kmcAdmin.ui.admin.Panel_NewBA_AO] Env.client.sendRequest(reqType, p)
+cn.com.infosec.netcert.framework.ServerException: Error Number:110008
+Error Message证书或ID错误
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.send(KMClient.java:200)
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.sendRequest(KMClient.java:123)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.Panel_NewBA_AO$2.widgetSelected(Panel_NewBA_AO.java:162)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.admin.SA_AA$AddAction.run(SA_AA.java:381)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:499)
+	at org.eclipse.jface.action.ActionContributionItem.handleWidgetSelection(ActionContributionItem.java:584)
+	at org.eclipse.jface.action.ActionContributionItem.access$2(ActionContributionItem.java:501)
+	at org.eclipse.jface.action.ActionContributionItem$5.handleEvent(ActionContributionItem.java:411)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$2.widgetSelected(Login.java:297)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.main(Login.java:414)
+[2019-11-08 11:35:05,645] - [cn.com.infosec.netcert.kmcAdmin.ui.login.Login] Login fail
+cn.com.infosec.netcert.framework.ServerException: Error Number:100101
+Error Message查询用户信息时出错
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.send(KMClient.java:200)
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.sendRequest(KMClient.java:123)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$2.widgetSelected(Login.java:284)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.refreshLogin(Login.java:505)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.access$1(Login.java:501)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$KeyLibConfig.run(Login.java:453)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:499)
+	at org.eclipse.jface.action.ActionContributionItem.handleWidgetSelection(ActionContributionItem.java:584)
+	at org.eclipse.jface.action.ActionContributionItem.access$2(ActionContributionItem.java:501)
+	at org.eclipse.jface.action.ActionContributionItem$5.handleEvent(ActionContributionItem.java:411)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.refreshLogin(Login.java:505)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.access$1(Login.java:501)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$ConfigAction.run(Login.java:433)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:499)
+	at org.eclipse.jface.action.ActionContributionItem.handleWidgetSelection(ActionContributionItem.java:584)
+	at org.eclipse.jface.action.ActionContributionItem.access$2(ActionContributionItem.java:501)
+	at org.eclipse.jface.action.ActionContributionItem$5.handleEvent(ActionContributionItem.java:411)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.main(Login.java:414)
+[2019-11-08 11:37:59,373] - [cn.com.infosec.netcert.kmcAdmin.ui.login.Login] Login fail
+cn.com.infosec.netcert.framework.ServerException: Error Number:100101
+Error Message查询用户信息时出错
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.send(KMClient.java:200)
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.sendRequest(KMClient.java:123)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$2.widgetSelected(Login.java:284)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.main(Login.java:414)
+[2019-11-11 09:28:38,451] - [cn.com.infosec.netcert.kmcAdmin.ui.login.Login] Login fail
+java.util.MissingResourceException: Can't find resource for bundle java.util.PropertyResourceBundle, key Notice_null_PIN
+	at java.util.ResourceBundle.getObject(ResourceBundle.java:450)
+	at java.util.ResourceBundle.getString(ResourceBundle.java:407)
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.makeRequest(KMClient.java:172)
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.sendRequest(KMClient.java:123)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$2.widgetSelected(Login.java:284)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.main(Login.java:414)
+[2019-11-11 16:17:44,382] - [cn.com.infosec.netcert.kmcAdmin.ui.login.Login] Login fail
+cn.com.infosec.netcert.framework.ServerException: Error Number:100100
+Error Message非法的用户ID，从数据库中查找不到该用户的记录
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.send(KMClient.java:200)
+	at cn.com.infosec.netcert.kmcAdmin.utils.KMClient.sendRequest(KMClient.java:123)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login$2.widgetSelected(Login.java:284)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4362)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1113)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4180)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3769)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:826)
+	at org.eclipse.jface.window.Window.open(Window.java:802)
+	at cn.com.infosec.netcert.kmcAdmin.ui.login.Login.main(Login.java:414)
+[2019-11-12 11:52:34,137] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:52:34,205] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:52:34,259] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:52:34,315] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:53:05,234] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:53:05,288] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:53:05,353] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:53:05,413] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:59:20,942] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:59:20,993] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:59:21,052] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 11:59:21,106] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 13:41:31,334] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 13:41:31,386] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 13:41:31,437] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 13:41:31,491] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:35:23,845] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:35:23,908] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:35:23,956] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:35:24,007] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:35:24,060] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:35:24,112] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:36:21,128] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:36:21,179] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:36:21,230] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:36:21,279] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:36:21,332] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:36:21,382] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:37:16,514] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:37:16,564] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:37:16,617] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:37:16,669] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:37:16,719] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:37:16,771] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:40:43,831] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:40:43,882] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:40:43,932] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:40:43,982] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:40:44,032] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:40:44,082] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:17,567] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:17,617] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:17,667] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:17,719] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:17,771] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:17,823] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:34,152] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:34,203] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:34,255] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:34,309] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:34,361] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:42:34,413] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:16,258] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:16,309] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:16,363] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:16,417] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:16,470] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:16,523] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:52,247] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:52,297] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:52,347] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:52,399] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:52,450] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:52,502] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:56,098] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:56,148] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:56,197] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:56,251] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:56,301] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:56,353] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:56,406] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:56,459] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:43:56,512] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:25,672] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:25,721] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:25,771] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:25,821] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:25,872] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:25,922] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:28,918] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:28,967] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:29,017] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:29,070] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:29,121] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:29,173] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:29,225] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:29,277] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 15:44:29,329] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:02426D7115B8CDE3EF25D060B4F607F] error: ret=0xa00001c
+[2019-11-12 17:18:46,559] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:DE75EB3666C5700316A123F2AC3C00A] error: ret=0xa00001c
+[2019-11-12 17:18:46,631] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:DE75EB3666C5700316A123F2AC3C00A] error: ret=0xa00001c
+[2019-11-12 17:18:46,681] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:DE75EB3666C5700316A123F2AC3C00A] error: ret=0xa00001c
+[2019-11-12 17:18:46,732] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:DE75EB3666C5700316A123F2AC3C00A] error: ret=0xa00001c
+[2019-11-12 17:18:46,783] - [cn.com.infosec.netcert.framework.crypto.impl.ukey.UsbKeySKFImpl] SKF_ExportCertificate[key:DE75EB3666C5700316A123F2AC3C00A] error: ret=0xa00001c

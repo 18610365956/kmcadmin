@@ -1,0 +1,52 @@
+package cn.com.infosec.netcert.kmcAdmin.utils;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * @Desc TODO
+ * @Author Infosec_jy
+ * @Date 2019年2月25日 上午11:18:10
+ */
+public class Utils {
+	public static final String NameConnector = new String(new byte[] { 10 });
+	public static final String separator = System.getProperty("line.separator");
+
+	/**
+	 * @Desc TODO   ip 地址验证
+	 * @Authod 江岩
+	 * @Date 2019年2月21日 下午2:17:00
+	 */
+	public static boolean checkIp(String ip){
+		
+		if(ip == null || ip.length() == 0)
+			return false;
+		String reg = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+						"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+						"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+						"([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+		Pattern p = Pattern.compile(reg);
+        Matcher m = p.matcher(ip);
+        if (m.matches()) {
+            return true;
+		} else {
+            return false;
+        }
+	}
+	/**
+	 * @Desc TODO  端口号校验
+	 * @Authod 江岩
+	 * @Date 2019年2月21日 下午2:33:42
+	 */
+	public static boolean checkPort(String port) {  
+		Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher isPort = pattern.matcher(port);
+        if (!isPort.matches()) {
+            return false;
+        }
+        if(Integer.valueOf(port) < 1 || Integer.valueOf(port) > 65535) {
+        	return false;
+        }
+        return true;
+	 }
+}
