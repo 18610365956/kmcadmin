@@ -1,8 +1,10 @@
 package cn.com.infosec.netcert.kmcAdmin.test;
 
-/**   
- * @Description (²¹³äÃèÊö) 
- * @Author ½­ÑÒ    
+import java.util.Date;
+
+/**
+ * @Description (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½) 
+ * @Author ï¿½ï¿½ï¿½ï¿½    
  * @Time 2019-08-05 14:56
  */
 public class Test_java {
@@ -11,12 +13,12 @@ public class Test_java {
 	 * @param     
 	 * @return        
 	 * @throws   
-	 * @Author ½­ÑÒ 
+	 * @Author ï¿½ï¿½ï¿½ï¿½ 
 	 * @Time   2019-08-05 14:56
 	 * @version 1.0 
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		System.out.println("this is idea git commit"+new Date());
 
 	}
 
